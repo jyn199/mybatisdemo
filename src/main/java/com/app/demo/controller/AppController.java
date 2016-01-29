@@ -41,7 +41,11 @@ public class AppController {
 		WebApplicationContext c = (WebApplicationContext)request.getSession().getServletContext().getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 		UserDao dao = (UserDao)c.getBean("userDaoImpl");
 		User u = dao.getUserById(1);
-		mav.addObject("username", u.getName());
+		if(u == null){
+			mav.addObject("username", null);
+		}else{
+			mav.addObject("username", u.getName());
+		}
 		return mav;
 	}
 
