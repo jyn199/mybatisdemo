@@ -42,6 +42,10 @@
 		</init-param>
 	</servlet>
 
+	<!--/*表示的是所有，即针对所有操作，请求action被拦截，转到jsp页面也被拦截； 
+		/的话，大部分是用于现在的restful风格的操作。 
+		如果是/*是404的话，确定一下你的静态文件操作是否处理了· 形如： <mvc:resources mapping="/images/**" location="/images/" 
+		cache-period="31556926"/> -->
 	<servlet-mapping>
 		<servlet-name>springmvc</servlet-name>
 		<url-pattern>/</url-pattern>
