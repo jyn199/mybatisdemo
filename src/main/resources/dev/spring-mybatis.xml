@@ -31,9 +31,19 @@
 		<property name="minIdle" value="${minIdle}" />
 	</bean>
 
+	<bean id="pagableInterceptor" class="com.app.mybatis.plugins.pagable.PagableInterceptor">
+		<!-- 可选 MYSQL, ORACLE -->
+		<property name="properties">
+			<map>
+				<entry key="dialect" value="${dialect}" />
+			</map>
+		</property>
+	</bean>
+
 	<!-- 创建SqlSessionFactory，同时指定数据源 -->
 	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
+		<property name="plugins" ref="pagableInterceptor" />
 	</bean>
 
 	<!--创建数据映射器，数据映射器必须为接口
@@ -51,5 +61,5 @@
 
 	<!-- <bean id="userDaoImpl" class="com.app.demo.dao.impl.UserDaoImpl"> <property 
 		name="userMapper" ref="userMapper" /> </bean> -->
-
+	
 </beans>
