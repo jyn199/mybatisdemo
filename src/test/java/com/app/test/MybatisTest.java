@@ -15,7 +15,7 @@ public class MybatisTest {
 //		System.out.println("ID为：" + 123 + "的用户为：" + user);
 		Pagination<User> param = new Pagination<User>();
 		param.setPageNo(1);
-		param.setPageSize(10);
+		param.setPageSize(3);
 		Pagination<User> res = mapper.getAllUser(param);
 		System.out.println(res.getList().size());
 	}
