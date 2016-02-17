@@ -16,19 +16,49 @@
     http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 
 	<!-- 引入jdbc配置文件 -->
-	<context:property-placeholder location="classpath:/conf/mybatis.properties" />
+	<bean id="propertyConfigurer"  
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+        <property name="locations">  
+            <list>  
+                <value>WEB-INF/classes/conf/mybatis.properties</value>  
+            </list>  
+        </property>  
+    </bean>
 
 	<!--创建jdbc数据源 -->
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+	<bean id="dataSourceRW" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName" value="${driver}" />
 		<property name="url" value="${url}" />
-		<property name="username" value="root" />
-		<property name="password" value="123456" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
 		<property name="initialSize" value="${initialSize}" />
 		<property name="maxActive" value="${maxActive}" />
 		<property name="maxIdle" value="${maxIdle}" />
 		<property name="minIdle" value="${minIdle}" />
+	</bean>
+	<!--只读数据库 -->
+	<bean id="dataSourceR" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${driverR}" />
+		<property name="url" value="${urlR}" />
+		<property name="username" value="${usernameR}" />
+		<property name="password" value="${passwordR}" />
+		<property name="initialSize" value="${initialSize}" />
+		<property name="maxActive" value="${maxActive}" />
+		<property name="maxIdle" value="${maxIdle}" />
+		<property name="minIdle" value="${minIdle}" />
+	</bean>
+	<!-- 动态数据源 -->
+	<bean id="dynamicDataSource" class="com.app.datasource.DynamicDataSource">
+		<!-- 通过key-value关联数据源 -->
+		<property name="targetDataSources">
+			<map>
+				<entry value-ref="dataSourceRW" key="dataSourceRW"></entry>
+				<entry value-ref="dataSourceR" key="dataSourceR"></entry>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="dataSourceR" />
 	</bean>
 
 	<bean id="pagableInterceptor" class="com.app.mybatis.plugins.pagable.PagableInterceptor">
@@ -42,15 +72,13 @@
 
 	<!-- 创建SqlSessionFactory，同时指定数据源 -->
 	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
+		<property name="dataSource" ref="dynamicDataSource" />
 		<property name="plugins" ref="pagableInterceptor" />
 	</bean>
 
-	<!--创建数据映射器，数据映射器必须为接口
-	<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.app.demo.dao.mapper.UserMapper" />
-		<property name="sqlSessionFactory" ref="sessionFactory" />
-	</bean> -->
+	<!--创建数据映射器，数据映射器必须为接口 <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean"> 
+		<property name="mapperInterface" value="com.app.demo.dao.mapper.UserMapper" 
+		/> <property name="sqlSessionFactory" ref="sessionFactory" /> </bean> -->
 
 
 	<!-- 采用自动扫描方式创建mapper bean(批量更新模式) -->
@@ -61,5 +89,5 @@
 
 	<!-- <bean id="userDaoImpl" class="com.app.demo.dao.impl.UserDaoImpl"> <property 
 		name="userMapper" ref="userMapper" /> </bean> -->
-	
+
 </beans>

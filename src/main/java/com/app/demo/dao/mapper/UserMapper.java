@@ -7,9 +7,9 @@ import com.app.demo.model.User;
 import com.app.mybatis.plugins.pagable.Pagination;
 
 public interface UserMapper {
-	@Select("SELECT * FROM USER as u WHERE u.id = #{userId}")
+	@Select("SELECT * FROM DEMO_TEST WHERE id = #{userId}")
 	User getUser(@Param("userId") long id);
 	
-	@Select("SELECT * FROM USER as u")
+	@Select("SELECT * FROM DEMO_TEST")
 	Pagination<User> getAllUser(Pagination<User> param);
 }

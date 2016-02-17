@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.app.datasource.DBContextHolder;
 import com.app.demo.dao.interfaces.UserDao;
 import com.app.demo.model.User;
 
@@ -37,6 +38,9 @@ public class AppController {
 	public ModelAndView getUser(HttpServletRequest request,
 			HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView("/app/user");
+		
+		// 设置读写，可以增加spring的切面
+		DBContextHolder.setDbType(DBContextHolder.DB_TYPE_RW);
 		
 		WebApplicationContext c = (WebApplicationContext)request.getSession().getServletContext().getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 		UserDao dao = (UserDao)c.getBean("userDaoImpl");
