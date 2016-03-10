@@ -74,6 +74,7 @@
 	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dynamicDataSource" />
 		<property name="plugins" ref="pagableInterceptor" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
 	</bean>
 
 	<!--创建数据映射器，数据映射器必须为接口 <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean"> 
