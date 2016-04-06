@@ -71,7 +71,7 @@
 	</bean>
 
 	<!-- 创建SqlSessionFactory，同时指定数据源 -->
-	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dynamicDataSource" />
 		<property name="plugins" ref="pagableInterceptor" />
 		<property name="configLocation" value="classpath:mybatis-config.xml" />
@@ -85,6 +85,9 @@
 	<!-- 采用自动扫描方式创建mapper bean(批量更新模式) -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.app.demo.dao.mapper" />
+		<!-- 使用sqlSessionFactoryBeanName注入，不会立即初始化sqlSessionFactory, 所以不会引发提前初始化问题。 -->
+		<!-- 在没有配置这一行时，必须配置一个以sqlSessionFactory命名的org.mybatis.spring.SqlSessionFactoryBean。 -->
+		<!-- <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/> -->
 	</bean>
 
 
